@@ -1,0 +1,13 @@
+-std=c++20 
+-I./gui/ 
+-I./gui//backends 
+-I.//src 
+-I./src//bvh
+-I./src//camera
+-I./src//hittable
+-I./src//material
+-I./src//texture
+-I./src//util
+-I./src//scenario
+-I./src//world
+

@@ -1,0 +1,30 @@
+{
+    "background": [178, 204, 255],
+    "image_width": 500,
+    "aspect_ratio": [1, 1],
+
+    "lookfrom": [13.0, 2.0, 3.0],
+    "lookat": [0.0, 0.0, 0.0],
+    "vup": [0.0, 1.0, 0.0],
+    "vfov": 20.0,
+    "aperture": 0.0,
+    "dist_to_focus": 10.0,
+    "time0": 0.0,
+    "time1": 1.0,
+
+    "samples" : 100,
+    "depth": 50,
+
+    "texture":[
+        {"type": "checker", "color1":[51, 76, 25], "color2":[229, 229, 229]}
+    ],
+
+    "material": [
+        {"type": "lambertian", "texture":0}
+    ],
+
+    "hittable":[
+        {"type": "sphere", "center":[0, -10, 0], "radius": 10, "material": 0, "show": true},
+        {"type": "sphere", "center":[0, 10, 0], "radius": 10, "material": 0, "show": true}
+    ]
+}
