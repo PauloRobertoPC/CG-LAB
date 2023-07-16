@@ -1,4 +1,9 @@
 #include "sphere.hpp"
+#include "imgui.h"
+
+sphere::sphere() {}
+sphere::sphere(point3 cen, double r, shared_ptr<material> m)
+        : center(cen), radius(r), mat_ptr(m) {}
 
 bool sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) const {
     vec3 oc = r.origin() - center;
@@ -33,4 +38,22 @@ bool sphere::bounding_box(double time0, double time1, aabb& output_box) const {
         center - vec3(radius, radius, radius),
         center + vec3(radius, radius, radius));
     return true;
+}
+
+void sphere::gui_edit(int idx){
+    float center_in[3]; center_in[0] = center[0]; center_in[1] = center[1]; center_in[2] = center[2];
+    float radius_in[1]; radius_in[0] = radius;
+    std::string s = "Sphere - " + std::to_string(idx);
+    const char *cs = s.c_str();
+    if (ImGui::TreeNode(cs)){
+        if(ImGui::InputFloat3("Position", center_in)){
+            center[0] = center_in[0];
+            center[1] = center_in[1];
+            center[2] = center_in[2];
+        }
+        if(ImGui::InputFloat("Radius", radius_in)){
+            this->radius = radius_in[0];
+        }
+        ImGui::TreePop();
+    }
 }

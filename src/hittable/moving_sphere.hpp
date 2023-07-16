@@ -21,6 +21,8 @@ class moving_sphere : public hittable {
 
         point3 center(double time) const;
 
+        virtual void gui_edit(int idx) override;
+
     public:
         point3 center0, center1;
         double time0, time1;

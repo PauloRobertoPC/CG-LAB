@@ -42,3 +42,12 @@ bool moving_sphere::bounding_box(double _time0, double _time1, aabb& output_box)
     output_box = surrounding_box(box0, box1);
     return true;
 }
+
+void moving_sphere::gui_edit(int idx){
+    std::string s = "Moving Sphere - " + std::to_string(idx);
+    const char *cs = s.c_str();
+    if (ImGui::TreeNode(cs)){
+        
+        ImGui::TreePop();
+    }
+}

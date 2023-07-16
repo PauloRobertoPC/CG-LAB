@@ -21,6 +21,8 @@ class xy_rect : public hittable {
             return true;
         }
 
+        virtual void gui_edit(int idx) override;
+
     public:
         shared_ptr<material> mp;
         double x0, x1, y0, y1, k;
@@ -43,6 +45,8 @@ class xz_rect : public hittable {
             return true;
         }
 
+        virtual void gui_edit(int idx) override;
+
     public:
         shared_ptr<material> mp;
         double x0, x1, z0, z1, k;
@@ -64,6 +68,8 @@ class yz_rect : public hittable {
             output_box = aabb(point3(k-0.0001, y0, z0), point3(k+0.0001, y1, z1));
             return true;
         }
+
+        virtual void gui_edit(int idx) override;
 
     public:
         shared_ptr<material> mp;

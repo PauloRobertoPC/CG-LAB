@@ -17,8 +17,14 @@ class box : public hittable  {
             return true;
         }
 
+        virtual void gui_edit(int idx) override;
+
     public:
         point3 box_min;
         point3 box_max;
+        shared_ptr<material> mat;
         hittable_list sides;
+
+    private:
+        void construct_box_with_rectangles();
 };

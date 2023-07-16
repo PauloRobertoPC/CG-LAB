@@ -1,4 +1,20 @@
 #include "constant_medium.hpp"
+#include "imgui.h"
+#include <iomanip>
+
+constant_medium::constant_medium(shared_ptr<hittable> b, double d, shared_ptr<texture> a)
+    : boundary(b),
+      density(d),
+      neg_inv_density(-1/d),
+      phase_function(make_shared<isotropic>(a))
+    {}
+
+constant_medium::constant_medium(shared_ptr<hittable> b, double d, color c)
+    : boundary(b),
+      density(d),
+      neg_inv_density(-1/d),
+      phase_function(make_shared<isotropic>(c))
+    {}
 
 bool constant_medium::hit(const ray& r, double t_min, double t_max, hit_record& rec) const {
     // Print occasional samples when debugging. To enable, set enableDebug true.
@@ -45,4 +61,18 @@ bool constant_medium::hit(const ray& r, double t_min, double t_max, hit_record& 
     rec.mat_ptr = phase_function;
 
     return true;
+}
+
+void constant_medium::gui_edit(int idx){
+    float ds[1]; ds[0] = density;
+    std::string s = "Constant Medium - " + std::to_string(idx);
+    const char *cs = s.c_str();
+    if (ImGui::TreeNode(cs)){
+        if(ImGui::InputFloat("Density", ds)){
+            density = ds[0];
+            neg_inv_density = (-1/density);
+        }
+        boundary->gui_edit(idx);
+        ImGui::TreePop();
+    }
 }

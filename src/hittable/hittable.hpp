@@ -3,6 +3,7 @@
 #include "../util/rtweekend.hpp"
 #include "../util/ray.hpp"
 #include "../bvh/aabb.hpp"
+#include "imgui.h"
 
 class material;
 
@@ -25,6 +26,7 @@ class hittable {
     public:
         virtual bool hit(const ray& r, double t_min, double t_max, hit_record& rec) const = 0;
         virtual bool bounding_box(double time0, double time1, aabb& output_box) const = 0;
+        virtual void gui_edit(int idx);
 };
 
 class translate : public hittable {
@@ -36,6 +38,8 @@ class translate : public hittable {
             const ray& r, double t_min, double t_max, hit_record& rec) const override;
 
         virtual bool bounding_box(double time0, double time1, aabb& output_box) const override;
+
+        virtual void gui_edit(int idx) override;
 
     public:
         shared_ptr<hittable> ptr;
@@ -54,8 +58,11 @@ class rotate_y : public hittable {
             return hasbox;
         }
 
+        virtual void gui_edit(int idx) override;
+
     public:
         shared_ptr<hittable> ptr;
+        double degree;
         double sin_theta;
         double cos_theta;
         bool hasbox;

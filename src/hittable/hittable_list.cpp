@@ -30,3 +30,13 @@ bool hittable_list::bounding_box(double time0, double time1, aabb& output_box) c
 
     return true;
 }
+
+void hittable_list::gui_edit(int idx){
+    std::cout << "GUI HITTABLE_LIST\n";
+    // std::string s = "Hittable List - " + std::to_string(idx);
+    // const char *cs = s.c_str();
+    // if (ImGui::TreeNode(cs)){
+    //     
+    //     ImGui::TreePop();
+    // }
+}

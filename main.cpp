@@ -262,7 +262,7 @@ int main(int, char**)
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
     #else
-        const char* glsl_version = "#version 130";
+    const char* glsl_version = "#version 130";
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
         //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
@@ -632,8 +632,17 @@ int main(int, char**)
             ImGui::SeparatorText("Options");
             if (ImGui::CollapsingHeader("Load Scene")){
                 ImGui::InputText("File", filename_scene, IM_ARRAYSIZE(filename_scene));
-                if(ImGui::Button("Load"))
-                    world = read_scene(filename_scene);
+                if(ImGui::Button("Load")){
+                    if(rendering)
+                        std::cout << "Cannot load scene, render in progress\n";
+                    else
+                        world = read_scene(filename_scene);
+                }
+            }
+            if (ImGui::CollapsingHeader("Edit Hittables Scene")){
+                int counter = 0;
+                for(auto h:world.objects)
+                    h->gui_edit(counter++);
             }
 
             ImGui::End();

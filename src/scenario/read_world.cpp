@@ -27,7 +27,6 @@ color toVec3(vector<float> &vf){
 vector<shared_ptr<texture>> read_texture(json &j){
     vector<shared_ptr<texture>> v;
     for(auto t:j["texture"]){
-        std::cout << t << "\n";
         if(t["type"] == "checker"){
             vector<float> color1 = t["color1"];
             vector<float> color2 = t["color2"];
@@ -49,7 +48,6 @@ vector<shared_ptr<texture>> read_texture(json &j){
 vector<shared_ptr<material>> read_material(json &j, vector<shared_ptr<texture>> &textures){
     vector<shared_ptr<material>> v;
     for(auto m:j["material"]){
-        std::cout << m << "\n";
         if(m["type"] == "lambertian"){
             v.push_back(make_shared<lambertian>(textures[m["texture"]]));
         }else if(m["type"] ==  "metal"){
@@ -68,9 +66,8 @@ vector<shared_ptr<material>> read_material(json &j, vector<shared_ptr<texture>> 
 
 hittable_list read_hittable(json &j, vector<shared_ptr<texture>> &textures, vector<shared_ptr<material>> &materials){
     hittable_list w;
-    std::vector<shared_ptr<hittable>> aux;
+    vector<shared_ptr<hittable>> aux;
     for(auto h:j["hittable"]){
-        std::cout << h << "\n";
         if(h["type"] == "sphere"){
             vector<float> center = h["center"];
             float radius = h["radius"];

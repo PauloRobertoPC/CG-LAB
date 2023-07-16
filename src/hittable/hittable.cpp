@@ -1,4 +1,10 @@
 #include "hittable.hpp"
+#include "imgui.h"
+#include <string>
+
+void hittable::gui_edit(int idx){
+    std::cout << "GUI HITTABLE\n";
+}
 
 bool translate::hit(const ray& r, double t_min, double t_max, hit_record& rec) const {
     ray moved_r(r.origin() - offset, r.direction(), r.time());
@@ -22,7 +28,22 @@ bool translate::bounding_box(double time0, double time1, aabb& output_box) const
     return true;
 }
 
+void translate::gui_edit(int idx){
+    float dsp[3]; dsp[0] = offset[0], dsp[1] = offset[1]; dsp[2] = offset[2];
+    std::string s = "Translate - " + std::to_string(idx);
+    const char *cs = s.c_str();
+    if (ImGui::TreeNode(cs)){
+        if(ImGui::InputFloat3("Displacement", dsp)){
+            offset[0] = dsp[0];
+            offset[1] = dsp[1];
+            offset[2] = dsp[2];
+        }
+        ImGui::TreePop();
+    }
+}
+
 rotate_y::rotate_y(shared_ptr<hittable> p, double angle) : ptr(p) {
+    degree = angle;
     auto radians = degrees_to_radians(angle);
     sin_theta = sin(radians);
     cos_theta = cos(radians);
@@ -82,4 +103,16 @@ bool rotate_y::hit(const ray& r, double t_min, double t_max, hit_record& rec) co
     rec.set_face_normal(rotated_r, normal);
 
     return true;
+}
+
+void rotate_y::gui_edit(int idx){
+    float ag[1]; ag[0] = degree;
+    std::string s = "Rotate Y - " + std::to_string(idx);
+    const char *cs = s.c_str();
+    if (ImGui::TreeNode(cs)){
+        if(ImGui::InputFloat("Angle", ag)){
+            *this = rotate_y(this->ptr, ag[0]);
+        }
+        ImGui::TreePop();
+    }
 }
