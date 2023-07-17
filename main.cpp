@@ -139,6 +139,7 @@ static float radius[1] = {0};
 static float time0_hit[1] = {0.0};
 static float time1_hit[1] = {1.0};
 static float density[1] = {1.0};
+static float X0[1] = {0}, X1[1] = {1}, Y0[1] = {0}, Y1[1] = {1}, Z0[1] = {0}, Z1[1] = {1}, K[1] = {0};
 //MATERIAL
 const char *used_material = "Lambertian";
 static float fuzz[1] = {0};
@@ -189,6 +190,12 @@ shared_ptr<hittable> get_hittable(){
         h = make_shared<moving_sphere>(toVec3(position0), toVec3(position1), time0_hit[0], time1_hit[0], radius[0], get_material());
     else if(strcmp(used_hittable, "Box") == 0)
         h = make_shared<box>(toVec3(position0), toVec3(position1), get_material());
+    else if(strcmp(used_hittable, "XY Rect") == 0)
+        h = make_shared<xy_rect>(X0[0], X1[0], Y0[0], Y1[0], K[0], get_material());
+    else if(strcmp(used_hittable, "XZ Rect") == 0)
+        h = make_shared<xz_rect>(X0[0], X1[0], Z0[0], Z1[0], K[0], get_material());
+    else if(strcmp(used_hittable, "YZ Rect") == 0)
+        h = make_shared<yz_rect>(Y0[0], Y1[0], Z0[0], Z1[0], K[0], get_material());
     return h;
 }
 
@@ -439,6 +446,91 @@ int main(int, char**)
                     ImGui::TreePop();
                 }
                 if (ImGui::TreeNode("Rect")){
+                    if (ImGui::TreeNode("XY")){
+                        ImGui::Button("XY Rect", ImVec2(60, 60));
+                        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)){
+                            const char* hittable = "Box";
+                            ImGui::SetDragDropPayload("HITTABLE", &hittable, strlen(hittable)*8);
+                            ImGui::Text("Copy %s", hittable);
+                            ImGui::EndDragDropSource();
+                        }
+                        ImGui::SeparatorText("Drag the Hittable Above");
+                        ImGui::InputFloat("x0", X0);
+                        ImGui::InputFloat("x1", X1);
+                        ImGui::InputFloat("y0", Y0);
+                        ImGui::InputFloat("y1", Y1);
+                        ImGui::InputFloat("k", K);
+                        ImGui::Button(used_material, ImVec2(60, 60));
+                        if (ImGui::BeginDragDropTarget())
+                        {
+                            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Material"))
+                                used_material = *(const char**)payload->Data;
+                            ImGui::EndDragDropTarget();
+                        }
+                        ImGui::SameLine(); ImGui::Text("Material");
+                        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(2 / 7.0f, 0.6f, 0.6f));
+                        if(ImGui::Button("Add XY_Rect"))
+                            world.add(make_shared<xy_rect>(X0[0], X1[0], Y0[0], Y1[0], K[0], get_material()));
+                        ImGui::PopStyleColor(1);
+                        ImGui::TreePop();
+                    }
+                    if (ImGui::TreeNode("XZ")){
+                        ImGui::Button("XZ Rect", ImVec2(60, 60));
+                        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)){
+                            const char* hittable = "Box";
+                            ImGui::SetDragDropPayload("HITTABLE", &hittable, strlen(hittable)*8);
+                            ImGui::Text("Copy %s", hittable);
+                            ImGui::EndDragDropSource();
+                        }
+                        ImGui::SeparatorText("Drag the Hittable Above");
+                        ImGui::InputFloat("x0", X0);
+                        ImGui::InputFloat("x1", X1);
+                        ImGui::InputFloat("z0", Z0);
+                        ImGui::InputFloat("z1", Z1);
+                        ImGui::InputFloat("k", K);
+                        ImGui::Button(used_material, ImVec2(60, 60));
+                        if (ImGui::BeginDragDropTarget())
+                        {
+                            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Material"))
+                                used_material = *(const char**)payload->Data;
+                            ImGui::EndDragDropTarget();
+                        }
+                        ImGui::SameLine(); ImGui::Text("Material");
+                        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(2 / 7.0f, 0.6f, 0.6f));
+                        if(ImGui::Button("Add XZ_Rect"))
+                            world.add(make_shared<xz_rect>(X0[0], X1[0], Z0[0], Z1[0], K[0], get_material()));
+                        ImGui::PopStyleColor(1);
+                        ImGui::TreePop();
+                    }
+                    if (ImGui::TreeNode("YZ")){
+                        ImGui::Button("YZ Rect", ImVec2(60, 60));
+                        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)){
+                            const char* hittable = "Box";
+                            ImGui::SetDragDropPayload("HITTABLE", &hittable, strlen(hittable)*8);
+                            ImGui::Text("Copy %s", hittable);
+                            ImGui::EndDragDropSource();
+                        }
+                        ImGui::SeparatorText("Drag the Hittable Above");
+                        ImGui::InputFloat("y0", Y0);
+                        ImGui::InputFloat("y1", Y1);
+                        ImGui::InputFloat("z0", Z0);
+                        ImGui::InputFloat("z1", Z1);
+                        ImGui::InputFloat("k", K);
+                        ImGui::Button(used_material, ImVec2(60, 60));
+                        if (ImGui::BeginDragDropTarget())
+                        {
+                            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Material"))
+                                used_material = *(const char**)payload->Data;
+                            ImGui::EndDragDropTarget();
+                        }
+                        ImGui::SameLine(); ImGui::Text("Material");
+                        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(2 / 7.0f, 0.6f, 0.6f));
+                        if(ImGui::Button("Add YZ_Rect"))
+                            world.add(make_shared<yz_rect>(Y0[0], Y1[0], Z0[0], Z1[0], K[0], get_material()));
+                        ImGui::PopStyleColor(1);
+                        ImGui::TreePop();
+                    }
+
                     ImGui::TreePop();
                 }
                 if (ImGui::TreeNode("Box")){
@@ -630,6 +722,17 @@ int main(int, char**)
                 ImGui::ColorEdit3("Color Texture##3", (float*)&color_texture, ImGuiColorEditFlags_NoInputs);
             }
             ImGui::SeparatorText("Options");
+            if (ImGui::CollapsingHeader("Edit Hittables Scene")){
+                for(int i = 0; i < world.objects.size(); i++){
+                    auto h = world.objects[i];
+                    if(h->gui_edit(i)){
+                        // Doing a trick to remove in O(1)
+                        swap(world.objects[i], world.objects.back());
+                        world.objects.pop_back();
+                        --i;
+                    }
+                }
+            }
             if (ImGui::CollapsingHeader("Load Scene")){
                 ImGui::InputText("File", filename_scene, IM_ARRAYSIZE(filename_scene));
                 if(ImGui::Button("Load")){
@@ -639,11 +742,10 @@ int main(int, char**)
                         world = read_scene(filename_scene);
                 }
             }
-            if (ImGui::CollapsingHeader("Edit Hittables Scene")){
-                int counter = 0;
-                for(auto h:world.objects)
-                    h->gui_edit(counter++);
-            }
+            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+            if (ImGui::Button("Clean Scene"))
+                world.objects.clear();
+            ImGui::PopStyleColor(1);
 
             ImGui::End();
         }

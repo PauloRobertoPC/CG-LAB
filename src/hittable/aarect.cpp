@@ -18,7 +18,8 @@ bool xy_rect::hit(const ray& r, double t_min, double t_max, hit_record& rec) con
     return true;
 }
 
-void xy_rect::gui_edit(int idx){
+int xy_rect::gui_edit(int idx){
+    bool remove = false;
     float X0[1]; X0[0] = x0;
     float X1[1]; X1[0] = x1;
     float Y0[1]; Y0[0] = y0;
@@ -27,18 +28,23 @@ void xy_rect::gui_edit(int idx){
     std::string s = "XY_Rect - " + std::to_string(idx);
     const char *cs = s.c_str();
     if (ImGui::TreeNode(cs)){
-        // if(ImGui::InputFloat("x0", X0))
-        //     this->x0 = X0[0];
-        // if(ImGui::InputFloat("x1", X1))
-        //     this->x1 = X1[0];
-        // if(ImGui::InputFloat("y0", Y0))
-        //     this->y0 = Y0[0];
-        // if(ImGui::InputFloat("y1", Y1))
-        //     this->y1 = Y1[0];
-        // if(ImGui::InputFloat("k", K))
-        //     this->k = K[0];
+        if(ImGui::InputFloat("x0", X0))
+            this->x0 = X0[0];
+        if(ImGui::InputFloat("x1", X1))
+            this->x1 = X1[0];
+        if(ImGui::InputFloat("y0", Y0))
+            this->y0 = Y0[0];
+        if(ImGui::InputFloat("y1", Y1))
+            this->y1 = Y1[0];
+        if(ImGui::InputFloat("k", K))
+            this->k = K[0];
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+        if (ImGui::Button("Remove"))
+            remove = true;
+        ImGui::PopStyleColor(1);
         ImGui::TreePop();
     }
+    return remove;
 }
 
 bool xz_rect::hit(const ray& r, double t_min, double t_max, hit_record& rec) const {
@@ -59,13 +65,33 @@ bool xz_rect::hit(const ray& r, double t_min, double t_max, hit_record& rec) con
     return true;
 }
 
-void xz_rect::gui_edit(int idx){
+int xz_rect::gui_edit(int idx){
+    bool remove = false;
+    float X0[1]; X0[0] = x0;
+    float X1[1]; X1[0] = x1;
+    float Z0[1]; Z0[0] = z0;
+    float Z1[1]; Z1[0] = z1;
+    float K[1]; K[0] = k;
     std::string s = "XZ_Rect - " + std::to_string(idx);
     const char *cs = s.c_str();
     if (ImGui::TreeNode(cs)){
-        
+        if(ImGui::InputFloat("x0", X0))
+            this->x0 = X0[0];
+        if(ImGui::InputFloat("x1", X1))
+            this->x1 = X1[0];
+        if(ImGui::InputFloat("z0", Z0))
+            this->z0 = Z0[0];
+        if(ImGui::InputFloat("z1", Z1))
+            this->z1 = Z1[0];
+        if(ImGui::InputFloat("k", K))
+            this->k = K[0];
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+        if (ImGui::Button("Remove"))
+            remove = true;
+        ImGui::PopStyleColor(1);
         ImGui::TreePop();
     }
+    return remove;
 }
 
 bool yz_rect::hit(const ray& r, double t_min, double t_max, hit_record& rec) const {
@@ -86,11 +112,31 @@ bool yz_rect::hit(const ray& r, double t_min, double t_max, hit_record& rec) con
     return true;
 }
 
-void yz_rect::gui_edit(int idx){
+int yz_rect::gui_edit(int idx){
+    bool remove = false;
+    float Y0[1]; Y0[0] = y0;
+    float Y1[1]; Y1[0] = y1;
+    float Z0[1]; Z0[0] = z0;
+    float Z1[1]; Z1[0] = z1;
+    float K[1]; K[0] = k;
     std::string s = "YZ_Rect - " + std::to_string(idx);
     const char *cs = s.c_str();
     if (ImGui::TreeNode(cs)){
-        
+        if(ImGui::InputFloat("y0", Y0))
+            this->y0 = Y0[0];
+        if(ImGui::InputFloat("y1", Y1))
+            this->y1 = Y1[0];
+        if(ImGui::InputFloat("z0", Z0))
+            this->z0 = Z0[0];
+        if(ImGui::InputFloat("z1", Z1))
+            this->z1 = Z1[0];
+        if(ImGui::InputFloat("k", K))
+            this->k = K[0];
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+        if (ImGui::Button("Remove"))
+            remove = true;
+        ImGui::PopStyleColor(1);
         ImGui::TreePop();
     }
+    return remove;
 }

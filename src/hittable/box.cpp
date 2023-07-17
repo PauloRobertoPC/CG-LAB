@@ -23,7 +23,8 @@ void box::construct_box_with_rectangles(){
     sides.add(make_shared<yz_rect>(box_min.y(), box_max.y(), box_min.z(), box_max.z(), box_min.x(), mat));
 }
 
-void box::gui_edit(int idx){
+int box::gui_edit(int idx){
+    bool remove = false;
     std::string s = "Box - " + std::to_string(idx);
     float start[3]; start[0] = box_min[0]; start[1] = box_min[1]; start[2] = box_min[2];
     float end[3]; end[0] = box_max[0]; end[1] = box_max[1]; end[2] = box_max[2];
@@ -41,6 +42,11 @@ void box::gui_edit(int idx){
             box_max[2] = end[2];
             construct_box_with_rectangles();
         }
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+        if (ImGui::Button("Remove"))
+            remove = true;
+        ImGui::PopStyleColor(1);
         ImGui::TreePop();
     }
+    return remove;
 }

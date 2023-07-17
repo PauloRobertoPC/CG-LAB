@@ -40,7 +40,8 @@ bool sphere::bounding_box(double time0, double time1, aabb& output_box) const {
     return true;
 }
 
-void sphere::gui_edit(int idx){
+int sphere::gui_edit(int idx){
+    bool remove = false;
     float center_in[3]; center_in[0] = center[0]; center_in[1] = center[1]; center_in[2] = center[2];
     float radius_in[1]; radius_in[0] = radius;
     std::string s = "Sphere - " + std::to_string(idx);
@@ -51,9 +52,13 @@ void sphere::gui_edit(int idx){
             center[1] = center_in[1];
             center[2] = center_in[2];
         }
-        if(ImGui::InputFloat("Radius", radius_in)){
+        if(ImGui::InputFloat("Radius", radius_in))
             this->radius = radius_in[0];
-        }
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+        if (ImGui::Button("Remove"))
+            remove = true;
+        ImGui::PopStyleColor(1);
         ImGui::TreePop();
     }
+    return remove;
 }

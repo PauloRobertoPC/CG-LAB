@@ -13,7 +13,7 @@ class sphere : public hittable {
 
         virtual bool bounding_box(double time0, double time1, aabb& output_box) const override;
 
-        virtual void gui_edit(int idx) override;
+        virtual int gui_edit(int idx) override;
 
     public:
         point3 center;

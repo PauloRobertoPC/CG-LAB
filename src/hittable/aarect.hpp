@@ -3,6 +3,7 @@
 #include "../util/rtweekend.hpp"
 
 #include "hittable.hpp"
+#include "imgui.h"
 
 class xy_rect : public hittable {
     public:
@@ -21,7 +22,7 @@ class xy_rect : public hittable {
             return true;
         }
 
-        virtual void gui_edit(int idx) override;
+        virtual int gui_edit(int idx) override;
 
     public:
         shared_ptr<material> mp;
@@ -45,7 +46,7 @@ class xz_rect : public hittable {
             return true;
         }
 
-        virtual void gui_edit(int idx) override;
+        virtual int gui_edit(int idx) override;
 
     public:
         shared_ptr<material> mp;
@@ -69,7 +70,7 @@ class yz_rect : public hittable {
             return true;
         }
 
-        virtual void gui_edit(int idx) override;
+        virtual int gui_edit(int idx) override;
 
     public:
         shared_ptr<material> mp;

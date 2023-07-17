@@ -19,7 +19,7 @@ class constant_medium : public hittable {
             return boundary->bounding_box(time0, time1, output_box);
         }
 
-        virtual void gui_edit(int idx) override;
+        virtual int gui_edit(int idx) override;
 
     public:
         shared_ptr<hittable> boundary;

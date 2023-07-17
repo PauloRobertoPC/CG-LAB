@@ -43,11 +43,35 @@ bool moving_sphere::bounding_box(double _time0, double _time1, aabb& output_box)
     return true;
 }
 
-void moving_sphere::gui_edit(int idx){
+int moving_sphere::gui_edit(int idx){
+    bool remove = false;
+    float CENTER0[3]; CENTER0[0] = center0[0]; CENTER0[1] = center0[1]; CENTER0[2] = center0[2];
+    float CENTER1[3]; CENTER1[0] = center1[0]; CENTER1[1] = center1[1]; CENTER1[2] = center1[2];
+    float t0[1] = {0}, t1[1] = {1}, r[1] = {1};
     std::string s = "Moving Sphere - " + std::to_string(idx);
     const char *cs = s.c_str();
     if (ImGui::TreeNode(cs)){
-        
+        if(ImGui::InputFloat3("Center 0", CENTER0)){
+            center0[0] = CENTER0[0];
+            center0[1] = CENTER0[1];
+            center0[2] = CENTER0[2];
+        }
+        if(ImGui::InputFloat3("Center 1", CENTER1)){
+            center1[0] = CENTER1[0];
+            center1[1] = CENTER1[1];
+            center1[2] = CENTER1[2];
+        }
+        if(ImGui::InputFloat("Time 0", t0))
+            time0 = t0[0];
+        if(ImGui::InputFloat("Time 1", t1))
+            time1 = t1[0];
+        if(ImGui::InputFloat("Radius", r))
+            radius = r[0];
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+        if (ImGui::Button("Remove"))
+            remove = true;
+        ImGui::PopStyleColor(1);
         ImGui::TreePop();
     }
+    return remove;
 }

@@ -2,8 +2,9 @@
 #include "imgui.h"
 #include <string>
 
-void hittable::gui_edit(int idx){
+int hittable::gui_edit(int idx){
     std::cout << "GUI HITTABLE\n";
+    return 0;  
 }
 
 bool translate::hit(const ray& r, double t_min, double t_max, hit_record& rec) const {
@@ -28,7 +29,8 @@ bool translate::bounding_box(double time0, double time1, aabb& output_box) const
     return true;
 }
 
-void translate::gui_edit(int idx){
+int translate::gui_edit(int idx){
+    bool remove = false;
     float dsp[3]; dsp[0] = offset[0], dsp[1] = offset[1]; dsp[2] = offset[2];
     std::string s = "Translate - " + std::to_string(idx);
     const char *cs = s.c_str();
@@ -38,8 +40,14 @@ void translate::gui_edit(int idx){
             offset[1] = dsp[1];
             offset[2] = dsp[2];
         }
+        remove |= ptr->gui_edit(idx);
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+        if (ImGui::Button("Remove"))
+            remove = true;
+        ImGui::PopStyleColor(1);
         ImGui::TreePop();
     }
+    return remove;
 }
 
 rotate_y::rotate_y(shared_ptr<hittable> p, double angle) : ptr(p) {
@@ -105,7 +113,8 @@ bool rotate_y::hit(const ray& r, double t_min, double t_max, hit_record& rec) co
     return true;
 }
 
-void rotate_y::gui_edit(int idx){
+int rotate_y::gui_edit(int idx){
+    bool remove = false;
     float ag[1]; ag[0] = degree;
     std::string s = "Rotate Y - " + std::to_string(idx);
     const char *cs = s.c_str();
@@ -113,6 +122,12 @@ void rotate_y::gui_edit(int idx){
         if(ImGui::InputFloat("Angle", ag)){
             *this = rotate_y(this->ptr, ag[0]);
         }
+        remove |= ptr->gui_edit(idx);
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+        if (ImGui::Button("Remove"))
+            remove = true;
+        ImGui::PopStyleColor(1);
         ImGui::TreePop();
     }
+    return remove;
 }

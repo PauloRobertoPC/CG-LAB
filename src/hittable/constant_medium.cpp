@@ -63,7 +63,8 @@ bool constant_medium::hit(const ray& r, double t_min, double t_max, hit_record& 
     return true;
 }
 
-void constant_medium::gui_edit(int idx){
+int constant_medium::gui_edit(int idx){
+    bool remove = false;
     float ds[1]; ds[0] = density;
     std::string s = "Constant Medium - " + std::to_string(idx);
     const char *cs = s.c_str();
@@ -72,7 +73,12 @@ void constant_medium::gui_edit(int idx){
             density = ds[0];
             neg_inv_density = (-1/density);
         }
-        boundary->gui_edit(idx);
+        remove |= boundary->gui_edit(idx);
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+        if (ImGui::Button("Remove"))
+            remove = true;
+        ImGui::PopStyleColor(1);
         ImGui::TreePop();
     }
+    return remove;
 }

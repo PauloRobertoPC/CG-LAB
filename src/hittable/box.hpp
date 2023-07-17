@@ -17,7 +17,7 @@ class box : public hittable  {
             return true;
         }
 
-        virtual void gui_edit(int idx) override;
+        virtual int gui_edit(int idx) override;
 
     public:
         point3 box_min;
