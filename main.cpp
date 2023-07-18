@@ -284,7 +284,7 @@ int main(int, char**)
         //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
     #endif
 
-    GLFWwindow* window = glfwCreateWindow(1200, 800, "Computer Graphics II", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1200, 800, "Computer Graphics Laboratory", nullptr, nullptr);
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
