@@ -17,4 +17,6 @@ vector<float> convolution_pixel(vector<float> &image, vector<vector<float>> &ker
 
 void convolution(vector<float> &image, int width, int height, vector<vector<float>> &kernell);
 
-void convolution(vector<float> &image, int width, int height, int dimension, float sigma);
+void gaussian_filter(vector<float> &image, int width, int height, int dimension, float sigma);
+
+void median_filter(vector<float> &image, int width, int height, int dimension, float sigma);

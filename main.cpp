@@ -117,6 +117,18 @@ void render(){
     duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count()/1000000.0;
 }
 
+void load_image(const char* image_name){
+    shared_ptr<image_texture> t = make_shared<image_texture>(image_name);
+    image_width = t->width;
+    image_height = t->height;
+    framebuffer.resize(image_width*image_height*4);
+    for(int c1 = 0, c2 = 0; c2 < image_width*image_height*4; c1 += 3, c2 += 4){
+        framebuffer[c2] = t->data[c1]/255.0;
+        framebuffer[c2+1] = t->data[c1+1]/255.0;
+        framebuffer[c2+2] = t->data[c1+2]/255.0;
+        framebuffer[c2+3] = 1.0;
+    }
+}
 
 void save_image(const char* image_name){
     int CHANNEL_NUM = 3;
@@ -774,11 +786,34 @@ int main(int, char**)
                     }else if(dimension[0] % 2 == 0){
                         std::cout << "Kernell Dimension must be odd\n";
                     }else{
-                        convolution(framebuffer, image_width, image_height, dimension[0], sigma[0]);
-                        // std::thread my_thread(convolution, framebuffer, image_width, image_height, dimension[0], sigma[0]);
-                        // std::thread filter_thread(convolution, framebuffer, image_width, image_height, dimension[0], sigma[0]);
+                        gaussian_filter(framebuffer, image_width, image_height, dimension[0], sigma[0]);
+                        // std::thread filter_thread(convolution, ref(framebuffer), image_width, image_height, dimension[0], sigma[0]);
                         std::cout << "Gaussian Filter Applied\n";
                     }
+                }
+            }
+            if (ImGui::CollapsingHeader("Median Filter")){
+                ImGui::InputInt("Kernell Dimension", dimension);
+                ImGui::InputFloat("Sigma", sigma);
+                if(ImGui::Button("Apply Filter")){
+                    if(rendering){
+                        std::cout << "Cannot apply filter, render in progress\n";
+                    }else if(dimension[0] % 2 == 0){
+                        std::cout << "Kernell Dimension must be odd\n";
+                    }else{
+                        gaussian_filter(framebuffer, image_width, image_height, dimension[0], sigma[0]);
+                        // std::thread filter_thread(convolution, ref(framebuffer), image_width, image_height, dimension[0], sigma[0]);
+                        std::cout << "Gaussian Filter Applied\n";
+                    }
+                }
+            }
+            if (ImGui::CollapsingHeader("Load Image")){
+                ImGui::InputText("File", filename_image, IM_ARRAYSIZE(filename_image));
+                if(ImGui::Button("Load")){
+                    if(rendering)
+                        std::cout << "Cannot save image, render in progress\n";
+                    else
+                        load_image(filename_image);
                 }
             }
             if (ImGui::CollapsingHeader("Save Image")){

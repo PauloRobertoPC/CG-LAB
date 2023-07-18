@@ -11,7 +11,7 @@ class image_texture : public texture {
     ~image_texture();
     virtual color value(double u, double v, const vec3& p) const override;
 
-    private:
+    public:
         unsigned char *data;
         int width, height;
         int bytes_per_scanline;

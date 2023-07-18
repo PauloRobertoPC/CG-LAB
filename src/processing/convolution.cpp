@@ -57,7 +57,10 @@ void convolution(vector<float> &image, int width, int height, vector<vector<floa
     }
 }
 
-void convolution(vector<float> &image, int width, int height, int dimension, float sigma){
+void gaussian_filter(vector<float> &image, int width, int height, int dimension, float sigma){
     vector<vector<float>> kernell = gaussianKernel(dimension, sigma);
     convolution(image, width, height, kernell);
+}
+
+void median_filter(vector<float> &image, int width, int height, int dimension, float sigma){
 }
