@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "convolution.hpp"
 
 vector<vector<float>> gaussianKernel(int dimension, float sigma){
@@ -22,6 +23,20 @@ bool in(int i, int j, int width, int height){
 vector<float> get_pixel(vector<float> &image, int i, int j, int width, int height){
     int base = (i*width + j)*4;
     return {image[base], image[base+1], image[base+2]};
+}
+
+vector<vector<vector<float>>> get_pixels_window(vector<float> &image, int i, int j, int dimension_window, int width_image, int height_image){
+    vector<float> px;
+    vector<vector<vector<float>>> pxs(dimension_window, vector<vector<float>>());
+    int step = dimension_window/2;
+    int i_min = i-step, i_max = i+step;
+    int j_min = j-step, j_max = j+step;
+    float weigth = 0;
+    for(int x = i_min, a = 0; x <= i_max; x++, a++)
+        for(int y = j_min, b = 0; y <= j_max; y++, b++)
+            if(in(x, y, width_image, height_image))
+                pxs[a].emplace_back(get_pixel(image, x, y, width_image, height_image));
+    return pxs;
 }
 
 vector<float> convolution_pixel(vector<float> &image, vector<vector<float>> &kernell, int i, int j, int width, int height){
@@ -57,10 +72,34 @@ void convolution(vector<float> &image, int width, int height, vector<vector<floa
     }
 }
 
+bool compare_luminance(vector<float> &px1, vector<float> &px2){
+    float l1 = accumulate(px1.begin(), px1.end(), 0.0);
+    float l2 = accumulate(px2.begin(), px2.end(), 0.0);
+    return l1 < l2;
+}
+
 void gaussian_filter(vector<float> &image, int width, int height, int dimension, float sigma){
     vector<vector<float>> kernell = gaussianKernel(dimension, sigma);
     convolution(image, width, height, kernell);
 }
 
-void median_filter(vector<float> &image, int width, int height, int dimension, float sigma){
+vector<float> median_pixel(vector<vector<vector<float>>> &pxs){
+    vector<vector<float>> linearized;
+    for(int i = 0; i < pxs.size(); i++)
+        for(int j = 0; j < pxs[i].size(); j++)
+            linearized.push_back(pxs[i][j]);
+    std::sort(linearized.begin(), linearized.end(), compare_luminance);
+    return linearized[linearized.size()/2];
+}
+
+void median_filter(vector<float> &image, int width, int height, int dimension){
+    vector<float> aux = image;
+    image.assign(width*height*4, 0.0);
+    for(int i = 0, c = 0; i < height; i++){
+        for(int j = 0; j < width; j++, c += 4){
+            vector<vector<vector<float>>> pxs = get_pixels_window(aux, i, j, dimension, width, height);
+            auto px = median_pixel(pxs);
+            image[c] = px[0]; image[c+1] = px[1]; image[c+2] = px[2]; image[c+3] = 1.0;
+        }
+    }
 }

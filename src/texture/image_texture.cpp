@@ -10,9 +10,6 @@ image_texture::image_texture(const char* filename) {
 
     data = stbi_load(filename, &width, &height, &components_per_pixel, components_per_pixel);
 
-    // data = stbi_load(
-    // filename, &width, &height, &components_per_pixel, components_per_pixel);
-
     if (!data) {
         std::cerr << "ERROR: Could not load texture image file '" << filename << "'.\n";
         width = height = 0;
