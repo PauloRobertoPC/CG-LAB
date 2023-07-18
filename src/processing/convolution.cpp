@@ -7,9 +7,11 @@ vector<vector<float>> gaussianKernel(int dimension, float sigma){
 	}
 	vector<vector<float>> kernel(dimension);
 	float s = 2.0*sigma*sigma; dimension >>= 1;
-	for(int i = -dimension; i <= dimension; i++)
-		for(int j = -dimension; j <= dimension; j++)
+	for(int i = -dimension; i <= dimension; i++){
+		for(int j = -dimension; j <= dimension; j++){
 			kernel[i+dimension].emplace_back((exp(-((i*i+j*j)/(s))))/(s*pi));
+        }
+    }
 	return kernel;
 }
 
@@ -30,7 +32,6 @@ vector<float> convolution_pixel(vector<float> &image, vector<vector<float>> &ker
     float weigth = 0;
     for(int x = i_min, a = 0; x <= i_max; x++, a++){
         for(int y = j_min, b = 0; y <= j_max; y++, b++){
-            std::cout << x << " " << y << "\n";
             if(in(x, y, width, height)){
                 px = get_pixel(image, x, y, width, height);
                 for(auto &component:px) component *= kernell[a][b];
@@ -41,15 +42,15 @@ vector<float> convolution_pixel(vector<float> &image, vector<vector<float>> &ker
     }
     for(auto &component:px_answer) component /= weigth;
     for(auto &component:px_answer) component = (component > 1.0 ? 1.0 : component);
-    return px;
+
+    return px_answer;
 }
 
 void convolution(vector<float> &image, int width, int height, vector<vector<float>> &kernell){
-    vector<float> aux(width*height*4, 0.0);
-    swap(image, aux);
+    vector<float> aux = image;
+    image.assign(width*height*4, 0.0);
     for(int i = 0, c = 0; i < height; i++){
         for(int j = 0; j < width; j++, c += 4){
-            // std::cout << i << " " << j << "\n";
             auto px = convolution_pixel(aux, kernell, i, j, width, height);
             image[c] = px[0]; image[c+1] = px[1]; image[c+2] = px[2]; image[c+3] = 1.0;
         }

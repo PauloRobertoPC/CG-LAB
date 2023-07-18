@@ -769,12 +769,16 @@ int main(int, char**)
                 ImGui::InputInt("Kernell Dimension", dimension);
                 ImGui::InputFloat("Sigma", sigma);
                 if(ImGui::Button("Apply Filter")){
-                    if(rendering)
+                    if(rendering){
                         std::cout << "Cannot apply filter, render in progress\n";
-                    else if(dimension[0] % 2 == 0)
+                    }else if(dimension[0] % 2 == 0){
                         std::cout << "Kernell Dimension must be odd\n";
-                    else
+                    }else{
                         convolution(framebuffer, image_width, image_height, dimension[0], sigma[0]);
+                        // std::thread my_thread(convolution, framebuffer, image_width, image_height, dimension[0], sigma[0]);
+                        // std::thread filter_thread(convolution, framebuffer, image_width, image_height, dimension[0], sigma[0]);
+                        std::cout << "Gaussian Filter Applied\n";
+                    }
                 }
             }
             if (ImGui::CollapsingHeader("Save Image")){
