@@ -83,6 +83,12 @@ void gaussian_filter(vector<float> &image, int width, int height, int dimension,
     convolution(image, width, height, kernell);
 }
 
+void mean_filter(vector<float> &image, int width, int height, int dimension){
+    vector<vector<float>> kernell(dimension, vector<float>(dimension));
+    for(int i = 0; i < dimension; i++) for(int j = 0; j < dimension; j++) kernell[i][j] = 1;
+    convolution(image, width, height, kernell);
+}
+
 vector<float> median_pixel(vector<vector<vector<float>>> &pxs){
     vector<vector<float>> linearized;
     for(int i = 0; i < pxs.size(); i++)

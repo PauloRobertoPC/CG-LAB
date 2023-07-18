@@ -24,3 +24,5 @@ void gaussian_filter(vector<float> &image, int width, int height, int dimension,
 vector<float> median_pixel(vector<vector<vector<float>>> &pxs);
 
 void median_filter(vector<float> &image, int width, int height, int dimension);
+
+void mean_filter(vector<float> &image, int width, int height, int dimension);

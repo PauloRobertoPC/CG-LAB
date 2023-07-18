@@ -777,7 +777,7 @@ int main(int, char**)
 
 
             ImGui::SeparatorText("Filter");
-            if (ImGui::CollapsingHeader("Gauss Filter")){
+            if (ImGui::CollapsingHeader("Gaussian Filter")){
                 ImGui::InputInt("Kernell Dimension", dimension);
                 ImGui::InputFloat("Sigma", sigma);
                 if(ImGui::Button("Apply Filter")){
@@ -787,8 +787,20 @@ int main(int, char**)
                         std::cout << "Kernell Dimension must be odd\n";
                     }else{
                         gaussian_filter(framebuffer, image_width, image_height, dimension[0], sigma[0]);
-                        // std::thread filter_thread(convolution, ref(framebuffer), image_width, image_height, dimension[0], sigma[0]);
                         std::cout << "Gaussian Filter Applied\n";
+                    }
+                }
+            }
+            if (ImGui::CollapsingHeader("Mean Filter")){
+                ImGui::InputInt("Kernell Dimension", dimension);
+                if(ImGui::Button("Apply Filter")){
+                    if(rendering){
+                        std::cout << "Cannot apply filter, render in progress\n";
+                    }else if(dimension[0] % 2 == 0){
+                        std::cout << "Kernell Dimension must be odd\n";
+                    }else{
+                        mean_filter(framebuffer, image_width, image_height, dimension[0]);
+                        std::cout << "Mean Filter Applied\n";
                     }
                 }
             }
@@ -801,7 +813,6 @@ int main(int, char**)
                         std::cout << "Kernell Dimension must be odd\n";
                     }else{
                         median_filter(framebuffer, image_width, image_height, dimension[0]);
-                        // std::thread filter_thread(convolution, ref(framebuffer), image_width, image_height, dimension[0], sigma[0]);
                         std::cout << "Median Filter Applied\n";
                     }
                 }
