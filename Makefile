@@ -25,11 +25,13 @@ SOURCES += ./src//hittable/aarect.cpp ./src//hittable/box.cpp ./src//hittable/co
 SOURCES += ./src//texture/image_texture.cpp
 SOURCES += ./src//world/canvas.cpp
 SOURCES += ./src//scenario/read_world.cpp
+SOURCES += ./src//processing/convolution.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 UNAME_S := $(shell uname -s)
 LINUX_GL_LIBS = -lGL
 
-CXXFLAGS = -std=c++20 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends -I.//src -I./src//bvh -I./src//camera -I./src//hittable -I./src//material -I./src//texture -I./src//util -I./src//world -I./src//scenario
+CXXFLAGS = -std=c++20 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends -I.//src -I./src//bvh -I./src//camera -I./src//hittable -I./src//material -I./src//texture -I./src//util -I./src//world -I./src//scenario -I./src//processing
+
 CXXFLAGS += -g -Wall -Wformat -Ofast -flto -pipe
 LIBS =
 
@@ -107,6 +109,9 @@ endif
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 	
 %.o:./src//scenario/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	
+%.o:./src//processing/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 all: $(EXE)

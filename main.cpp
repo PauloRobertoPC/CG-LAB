@@ -1,3 +1,5 @@
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+
 #include <cstring>
 #include <iostream>
 #include <memory>
@@ -31,6 +33,8 @@
 #include "image_texture.hpp"
 #include "noise_texture.hpp"
 #include "canvas.h"
+#include "convolution.hpp"
+#include "stb_image_write.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -113,14 +117,15 @@ void render(){
     duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count()/1000000.0;
 }
 
-void save_img_ppm(){
-    std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
-    int lim = image_width*image_width*4;
-    for(int i = 0; i < lim && !stop; i += 4){
-        for(int j = 0; j < 3; j++)
-            std::cout << framebuffer[i+j]*256 << " ";
-        std::cout << "\n"; 
-    }
+
+void save_image(const char* image_name){
+    int CHANNEL_NUM = 3;
+	int width = image_width, height = image_height;
+  	int8_t *imageW = new int8_t[width * height * CHANNEL_NUM];
+	for(int i = 0, c1 = 0, c2 = 0; i < height; i++)
+		for(int j = 0; j < width; j++, c1 += 3, c2 += 4)
+			imageW[c1] = framebuffer[c2]*255, imageW[c1+1] = framebuffer[c2+1]*255, imageW[c1+2] = framebuffer[c2+2]*255;
+	stbi_write_png(image_name, width, height, CHANNEL_NUM, imageW, width * CHANNEL_NUM);
 }
 
 vec3 toVec3(float *v4){
@@ -153,6 +158,9 @@ static ImVec4 color_texture = ImVec4(0., 1., 0., 1.);
 const char *used_texture = "Checker";
 //OPTIONS
 static char filename_scene[128] = "./scenarios/";
+static char filename_image[128] = "./images/";
+int dimension[1] = {5};
+float sigma[1] = {1.5};
 
 shared_ptr<texture> get_texture(){
     shared_ptr<texture> t;
@@ -337,7 +345,7 @@ int main(int, char**)
         // SETTINGS
         {
             ImGui::SetNextWindowPos(ImVec2(image_width, 0));
-            ImGui::SetNextWindowSize(ImVec2(400, image_height+16));
+            // ImGui::SetNextWindowSize(ImVec2(400, image_height+16));
             ImGui::Begin("Settings", nullptr, ImGuiWindowFlags_NoTitleBar);
             ImGui::SeparatorText("Settings");
             if (ImGui::Button("Render")){
@@ -370,6 +378,10 @@ int main(int, char**)
                 ImGui::PopStyleColor(1);
             }
             ImGui::Text("Rendering Time: %0.4fs", duration);
+
+
+
+            ImGui::SeparatorText("Edit Scene");
             if (ImGui::CollapsingHeader("Image")){
                 ImGui::ColorEdit3("Background##1", (float*)&background_input, 0);
                 ImGui::InputInt("Image Width", image_width_input);
@@ -389,6 +401,34 @@ int main(int, char**)
                 ImGui::InputInt("Samples Per Pixel", samples_per_pixel_input);
                 ImGui::InputInt("Max Recursion Depth", max_depth_input);
             }
+            if (ImGui::CollapsingHeader("Edit Hittables")){
+                for(int i = 0; i < world.objects.size(); i++){
+                    auto h = world.objects[i];
+                    if(h->gui_edit(i)){
+                        // Doing a trick to remove in O(1)
+                        swap(world.objects[i], world.objects.back());
+                        world.objects.pop_back();
+                        --i;
+                    }
+                }
+            }
+            if (ImGui::CollapsingHeader("Load Scene")){
+                ImGui::InputText("File", filename_scene, IM_ARRAYSIZE(filename_scene));
+                if(ImGui::Button("Load")){
+                    if(rendering)
+                        std::cout << "Cannot load scene, render in progress\n";
+                    else
+                        world = read_scene(filename_scene);
+                }
+            }
+            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+            if (ImGui::Button("Clean Scene"))
+                world.objects.clear();
+            ImGui::PopStyleColor(1);
+
+
+
+            ImGui::SeparatorText("Add Scene");
             if (ImGui::CollapsingHeader("Hittable")){
                 if (ImGui::TreeNode("Sphere")){
                     ImGui::Button("Sphere", ImVec2(60, 60));
@@ -721,31 +761,31 @@ int main(int, char**)
                 ImGui::SameLine();
                 ImGui::ColorEdit3("Color Texture##3", (float*)&color_texture, ImGuiColorEditFlags_NoInputs);
             }
-            ImGui::SeparatorText("Options");
-            if (ImGui::CollapsingHeader("Edit Hittables Scene")){
-                for(int i = 0; i < world.objects.size(); i++){
-                    auto h = world.objects[i];
-                    if(h->gui_edit(i)){
-                        // Doing a trick to remove in O(1)
-                        swap(world.objects[i], world.objects.back());
-                        world.objects.pop_back();
-                        --i;
-                    }
-                }
-            }
-            if (ImGui::CollapsingHeader("Load Scene")){
-                ImGui::InputText("File", filename_scene, IM_ARRAYSIZE(filename_scene));
-                if(ImGui::Button("Load")){
+
+
+
+            ImGui::SeparatorText("Image");
+            if (ImGui::CollapsingHeader("Gauss Filter")){
+                ImGui::InputInt("Kernell Dimension", dimension);
+                ImGui::InputFloat("Sigma", sigma);
+                if(ImGui::Button("Apply Filter")){
                     if(rendering)
-                        std::cout << "Cannot load scene, render in progress\n";
+                        std::cout << "Cannot apply filter, render in progress\n";
+                    else if(dimension[0] % 2 == 0)
+                        std::cout << "Kernell Dimension must be odd\n";
                     else
-                        world = read_scene(filename_scene);
+                        convolution(framebuffer, image_width, image_height, dimension[0], sigma[0]);
                 }
             }
-            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
-            if (ImGui::Button("Clean Scene"))
-                world.objects.clear();
-            ImGui::PopStyleColor(1);
+            if (ImGui::CollapsingHeader("Save Image")){
+                ImGui::InputText("File", filename_image, IM_ARRAYSIZE(filename_image));
+                if(ImGui::Button("Save")){
+                    if(rendering)
+                        std::cout << "Cannot save image, render in progress\n";
+                    else
+                        save_image(filename_image);
+                }
+            }
 
             ImGui::End();
         }

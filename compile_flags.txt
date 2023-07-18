@@ -10,4 +10,5 @@
 -I./src//util
 -I./src//scenario
 -I./src//world
+-I./src//processing
 
