@@ -28,6 +28,7 @@
     "hittable":[
         {"type": "sphere", "center":[0, -1000, 0], "radius": 1000, "material": 0, "show": true},
         {"type": "sphere", "center":[0, 2, 0], "radius": 2, "material": 0, "show": true},
-        {"type": "xy_rect", "x0":3.0, "x1":5.0, "y0": 1.0, "y1": 3.0, "k": -2.0, "material": 1, "show": true}
+        {"type": "xy_rect", "x0":3.0, "x1":5.0, "y0": 1.0, "y1": 3.0, "k": -2.0, "material": 1, "show": true},
+        {"type": "sphere", "center":[0, 7, 0], "radius": 2, "material": 1, "show": true}
     ]
 }
