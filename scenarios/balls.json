@@ -1,0 +1,137 @@
+{
+  "background": [255, 186, 186],
+  "image_width": 600,
+  "aspect_ratio": [1, 1],
+
+  "lookfrom": [478, 278, -600],
+  "lookat": [278, 278, 0],
+  "vup": [0.0, 1.0, 0.0],
+  "vfov": 40.0,
+  "aperture": 0.0,
+  "dist_to_focus": 2.0,
+  "time0": 0.0,
+  "time1": 1.0,
+
+  "samples": 20000,
+  "depth": 50,
+
+  "texture": [
+    { "type": "color", "color": [165, 12, 12] },
+    { "type": "color", "color": [186, 186, 186] },
+    { "type": "color", "color": [30, 114, 38] },
+    { "type": "color", "color": [3825, 3825, 3825] },
+    { "type": "color", "color": [178, 76, 135] },
+    { "type": "image", "filename": "./texture_image/earthmap.jpg" }
+  ],
+
+  "material": [
+    { "type": "lambertian", "texture": 4 },
+    { "type": "lambertian", "texture": 1 },
+    { "type": "lambertian", "texture": 2 },
+    { "type": "light", "texture": 3 },
+    { "type": "dieletric", "index_refraction": 1.5 },
+    { "type": "metal", "color": [204, 204, 204], "fuzz": 1.0 },
+    { "type": "lambertian", "texture": 5 }
+  ],
+
+  "hittable": [
+    {
+      "type": "yz_rect",
+      "y0": 0.0,
+      "y1": 555.0,
+      "z0": 0.0,
+      "z1": 555.0,
+      "k": 555.0,
+      "material": 2,
+      "show": true
+    },
+    {
+      "type": "yz_rect",
+      "y0": 0.0,
+      "y1": 555.0,
+      "z0": 0.0,
+      "z1": 555.0,
+      "k": 0.0,
+      "material": 0,
+      "show": true
+    },
+    {
+      "type": "xz_rect",
+      "x0": 213.0,
+      "x1": 343.0,
+      "z0": 227.0,
+      "z1": 332.0,
+      "k": 554.0,
+      "material": 3,
+      "show": true
+    },
+    {
+      "type": "xz_rect",
+      "x0": 0.0,
+      "x1": 555.0,
+      "z0": 0.0,
+      "z1": 555.0,
+      "k": 0.0,
+      "material": 1,
+      "show": true
+    },
+    {
+      "type": "xz_rect",
+      "x0": 0.0,
+      "x1": 555.0,
+      "z0": 0.0,
+      "z1": 555.0,
+      "k": 555.0,
+      "material": 1,
+      "show": true
+    },
+    {
+      "type": "xy_rect",
+      "x0": 0.0,
+      "x1": 555.0,
+      "y0": 0.0,
+      "y1": 555.0,
+      "k": 555.0,
+      "material": 1,
+      "show": true
+    },
+    {
+      "type": "sphere",
+      "center": [360, 150, 145],
+      "radius": 70,
+      "material": 5,
+      "show": true
+    },
+    {
+      "type": "sphere",
+      "center": [260, 150, 45],
+      "radius": 50,
+      "material": 4,
+      "show": true
+    },
+    {
+      "type": "sphere",
+      "center": [400, 200, 400],
+      "radius": 100,
+      "material": 6,
+      "show": true
+    },
+    {
+      "type": "moving_sphere",
+      "center0": [400, 400, 200],
+      "center1": [430, 400, 200],
+      "time0": 0.0,
+      "time1": 1.0,
+      "radius": 50,
+      "material": 0,
+      "show": true
+    },
+    {
+      "type": "sphere",
+      "center": [15, 150, 145],
+      "radius": 50,
+      "material": 5,
+      "show": true
+    }
+  ]
+}
