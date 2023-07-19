@@ -352,8 +352,8 @@ int main(int, char**)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::ShowDemoWindow();
-//
+        // ImGui::ShowDemoWindow();
+
         // SETTINGS
         {
             ImGui::SetNextWindowPos(ImVec2(image_width, 0));
@@ -425,7 +425,7 @@ int main(int, char**)
                 }
             }
             if (ImGui::CollapsingHeader("Load Scene")){
-                ImGui::InputText("File", filename_scene, IM_ARRAYSIZE(filename_scene));
+                ImGui::InputText("file.json", filename_scene, IM_ARRAYSIZE(filename_scene));
                 if(ImGui::Button("Load")){
                     if(rendering)
                         std::cout << "Cannot load scene, render in progress\n";
@@ -822,7 +822,7 @@ int main(int, char**)
 
             ImGui::SeparatorText("Image");
             if (ImGui::CollapsingHeader("Load Image")){
-                ImGui::InputText("File", filename_image, IM_ARRAYSIZE(filename_image));
+                ImGui::InputText("file.png", filename_image, IM_ARRAYSIZE(filename_image));
                 if(ImGui::Button("Load")){
                     if(rendering)
                         std::cout << "Cannot save image, render in progress\n";
@@ -831,7 +831,7 @@ int main(int, char**)
                 }
             }
             if (ImGui::CollapsingHeader("Save Image")){
-                ImGui::InputText("File", filename_image, IM_ARRAYSIZE(filename_image));
+                ImGui::InputText("file.png", filename_image, IM_ARRAYSIZE(filename_image));
                 if(ImGui::Button("Save")){
                     if(rendering)
                         std::cout << "Cannot save image, render in progress\n";

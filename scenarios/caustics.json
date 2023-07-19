@@ -1,0 +1,42 @@
+{
+    "background": [0, 0, 0],
+    "image_width": 600,
+    "aspect_ratio": [1, 1],
+
+    "lookfrom": [278, 278, -800],
+    "lookat": [278, 278, 0],
+    "vup": [0.0, 1.0, 0.0],
+    "vfov": 40.0,
+    "aperture": 0.0,
+    "dist_to_focus": 10.0,
+    "time0": 0.0,
+    "time1": 1.0,
+
+    "samples" : 200,
+    "depth": 50,
+
+    "texture":[
+        {"type": "color", "color":[165, 12, 12]},
+        {"type": "color", "color":[186, 186, 186]},
+        {"type": "color", "color":[30, 114, 38]},
+        {"type": "color", "color":[3825, 3825, 3825]}
+    ],
+
+    "material": [
+        {"type": "lambertian", "texture":0},
+        {"type": "lambertian", "texture":1},
+        {"type": "lambertian", "texture":2},
+        {"type": "light", "texture":3},
+        {"type": "dieletric", "index_refraction":1.5}
+    ],
+
+    "hittable":[
+        {"type": "yz_rect", "y0":0.0, "y1":555.0, "z0": 0.0, "z1": 555.0, "k": 555.0, "material": 2, "show": true},
+        {"type": "yz_rect", "y0":0.0, "y1":555.0, "z0": 0.0, "z1": 555.0, "k": 0.0, "material": 0, "show": true},
+        {"type": "xz_rect", "x0":213.0, "x1":343.0, "z0": 227.0, "z1": 332.0, "k": 554.0, "material": 3, "show": true},
+        {"type": "xz_rect", "x0":0.0, "x1":555.0, "z0": 0.0, "z1": 555.0, "k": 0.0, "material": 1, "show": true},
+        {"type": "xz_rect", "x0":0.0, "x1":555.0, "z0": 0.0, "z1": 555.0, "k": 555.0, "material": 1, "show": true},
+        {"type": "xy_rect", "x0":0.0, "x1":555.0, "y0": 0.0, "y1": 555.0, "k": 555.0, "material": 1, "show": true},
+        {"type": "sphere", "center":[278, 278, 278], "radius": 100, "material": 4, "show": true}
+    ]
+}
